@@ -1,24 +1,24 @@
-import React from "react";
+import React, {  useState } from "react";
 import styles from './form.module.css';
 
 const Form = () => {
-  const nameRef = React.useRef<HTMLInputElement>(null);
-  const ageRef = React.useRef<HTMLInputElement>(null);
+ 
+  const [person,setPerson]=useState({ name: "", age: '' });
+
   const handleSubmit=(event: React.FormEvent) => {
     event.preventDefault();
-    const name = nameRef.current?.value;
-    const age = ageRef.current?.value;
-    console.log("Name:", name, "Age:", age);
+console.log(person);
   }
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="name" >
         <label htmlFor="name" className="fomLabel">Name</label>
-        <input ref={nameRef}id="name" type="text" className="formInput" />
+        <input value={person.name} onChange={(event)=> setPerson({...person, name:event.currentTarget.value})} id="name" type="text" className="formInput" />
       </div>
       <div className="age">
         <label htmlFor="age" className="formLabel">Age</label>
-        <input ref={ageRef} type="number" id="age" className="formAge" />
+        <input value={person.age} onChange={(event)=> setPerson({...person, age: event.currentTarget.value})} type="number" id="age" className="formAge" />
       </div>
       <button type="submit" className={styles.btn}>Submit</button>
     </form>
