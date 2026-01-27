@@ -1,0 +1,13 @@
+.formTable {
+  align-items: center;
+  text-align: center;
+  padding: 25px 0px;
+}
+.input{
+  width: 400px;
+  height: 45px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 9px 25px ;
+ 
+}

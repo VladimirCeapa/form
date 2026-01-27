@@ -1,15 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import Form from './components/form'
 
-function App() {
-  
+import "./App.css";
 
-  return (
-  <Form />
-  )
+import Table from "./components/Table";
+import TableFilter from "./components/TableFilter";
+import TableResult from "./components/TableResult";
+import data from './components/data'
+import { useState } from "react";
+
+interface DataTable {
+  id: number,
+  description: string,
+  amount: string,
+  category: string
 }
 
-export default App
+
+function App() {
+  const [dataInfo, setData] = useState<DataTable[]>(data)
+  return (
+    <div className="App">
+      <Table />
+      <TableFilter />
+      <TableResult data={data} />
+
+    </div>
+  );
+}
+
+export default App;
