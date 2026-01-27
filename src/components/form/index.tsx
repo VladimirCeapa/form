@@ -1,24 +1,34 @@
-import React, {  useState } from "react";
+
 import styles from './form.module.css';
+import {useForm} from  "react-hook-form"
+import type { FieldValues } from "react-hook-form";
 
 const Form = () => {
  
-  const [person,setPerson]=useState({ name: "", age: '' });
+  const { register,handleSubmit } = useForm(); // initialize the hook из react-hook-form
+  
 
-  const handleSubmit=(event: React.FormEvent) => {
-    event.preventDefault();
-console.log(person);
-  }
+const onSubmit = (data:FieldValues) => {
+  console.log(data);
+}
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="name" >
         <label htmlFor="name" className="fomLabel">Name</label>
-        <input value={person.name} onChange={(event)=> setPerson({...person, name:event.currentTarget.value})} id="name" type="text" className="formInput" />
+        <input
+         {...register('name')} // регистрация инпута
+           id="name" 
+           type="text" 
+           className="formInput" />
       </div>
       <div className="age">
         <label htmlFor="age" className="formLabel">Age</label>
-        <input value={person.age} onChange={(event)=> setPerson({...person, age: event.currentTarget.value})} type="number" id="age" className="formAge" />
+        <input
+         {...register('age')} 
+          type="number"
+           id="age" 
+           className="formAge" />
       </div>
       <button type="submit" className={styles.btn}>Submit</button>
     </form>
