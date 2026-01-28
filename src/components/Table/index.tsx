@@ -1,18 +1,29 @@
 import React, { useState } from 'react'
 import styles from './table.module.css'
-import data from '../data'
 import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import type { FieldValues } from 'react-hook-form'
-const Table = () => {
+interface DataTable {
+  id: number,
+  description: string,
+  amount: string,
+  category: string
+}
+interface TableProps {
+data:DataTable[]
+  setData:(data: DataTable[])=> void
+}
 
+
+const Table = ({data,setData}: TableProps) => {
   const schema = z.object({
-    Description: z.string().min(3),
-    Amount: z.number().min(3),
-    Category: z.string().min(3),
+    description: z.string().min(3,{'message':'Description must be at least 3 characters long'}),
+    amount:  z.coerce.number({invalid_type_error: 'Amount field is required'}).min(1,{'message':'Amount must be greater than 0'}  ),
+    category: z.string().min(3),
   })
   type FormData = z.infer<typeof schema>
-  const { register, handleSubmit } = useForm<FormData>()
+  const { register, handleSubmit, formState:{errors} } = useForm<FormData>({resolver:zodResolver(schema)});
 
   const [selectedValue, setSelectedValue] = useState('Groceries');
   const options = [
@@ -21,7 +32,14 @@ const Table = () => {
     { value: 'Entertainment', label: 'Entertainment' },
   ];
   const onSubmit = (dataTable: FieldValues) => {
-    [...data, { ...dataTable }]
+    const newItem: DataTable ={
+      id: data.length + 1,
+      description: dataTable.description,
+      amount: dataTable.amount,
+      category: dataTable.category
+    } 
+   
+  setData([...data,newItem])
   }
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedValue(event.target.value);
@@ -30,15 +48,17 @@ const Table = () => {
     <form className={styles.formTable} onSubmit={handleSubmit(onSubmit)}>
       <div className={styles.formItem}>
         <label htmlFor="Description" className={styles.label}>Description</label>
-        <input  {...register("Description", {})} id='Description' type="text" className={styles.input} />
+        <input  {...register("description", {})} id='Description' type="text" className={styles.input} />
       </div>
+      {errors.description && <p className={styles.error}>{errors.description.message}</p> }
       <div className={styles.formItem}>
         <label htmlFor="Amount" className={styles.label}>Amount</label>
-        <input {...register("Amount", {})} id='Amount' type="number" className={styles.input} />
+        <input {...register("amount")} id='Amount' type="number" className={styles.input} />
       </div>
+       {errors.amount && <p className={styles.error}>{errors.amount.message}</p> }
       <div className={styles.formItem}>
         <label htmlFor="Category" className={styles.label}>Category</label>
-        <select {...register("Category", {})} value={selectedValue} onChange={handleChange} className={styles.selectInput}>
+        <select {...register("category")} value={selectedValue} onChange={handleChange} className={styles.selectInput}>
           {options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
@@ -47,6 +67,7 @@ const Table = () => {
         </select>
       </div>
       <button className={styles.btn} type="submit">Submit</button>
+
     </form>
   )
 }
