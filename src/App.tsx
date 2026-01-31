@@ -1,6 +1,5 @@
 
 import "./App.css";
-
 import Table from "./components/Table";
 import TableFilter from "./components/TableFilter";
 import TableResult from "./components/TableResult";
@@ -19,9 +18,9 @@ function App() {
   const [dataInfo, setData] = useState<DataTable[]>(data)
   return (
     <div className="App">
-      <Table />
+      <Table data={dataInfo} setData={setData} />
       <TableFilter />
-      <TableResult data={data} />
+      <TableResult data={dataInfo} setData={setData}   />
 
     </div>
   );

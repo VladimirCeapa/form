@@ -8,10 +8,10 @@ type DataItem = {
 };
 interface TableResultProps {
   data: DataItem[];
+ 
 }
 
 const index = ({ data }: TableResultProps) => {
-
 
   return (
     <table className={styles.table}>
@@ -19,7 +19,6 @@ const index = ({ data }: TableResultProps) => {
         <th >Description</th>
         <th>Amount</th>
         <th>Category</th>
-
       </tr>
       <tbody>
         {data.map((item) => (
